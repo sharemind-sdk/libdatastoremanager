@@ -26,9 +26,9 @@
 
 #include <cstdint>
 #include <map>
+#include <sharemind/libprocessfacility.h>
 #include "datastoreapi.h"
 #include "DataStoreFactory.h"
-#include "libprocessfacility.h"
 
 
 namespace sharemind {
