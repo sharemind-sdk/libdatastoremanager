@@ -17,9 +17,9 @@
 # For further information, please contact us at sharemind@cyber.ee.
 #
 
-SET(PACKAGE_VERSION "@LIBEXECUTIONPROFILER_VERSION@")
-IF(NOT SharemindLibExecutionProfiler_QUIET)
-    MESSAGE(STATUS "Sharemind ExecutionProfiler version: ${PACKAGE_VERSION}")
+SET(PACKAGE_VERSION "@LIBDATASTOREMANAGER_VERSION@")
+IF(NOT SharemindLibDataStoreManager_QUIET)
+    MESSAGE(STATUS "Sharemind DataStoreManager version: ${PACKAGE_VERSION}")
 ENDIF()
 
 IF("${PACKAGE_VERSION}" VERSION_LESS "${PACKAGE_FIND_VERSION}")
