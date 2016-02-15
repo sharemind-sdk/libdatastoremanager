@@ -20,7 +20,9 @@
 #include "DataStoreManager.h"
 
 #include <cassert>
+#include <sharemind/libprocessfacility.h>
 #include "DataStore.h"
+#include "DataStoreFactory.h"
 
 
 namespace {
