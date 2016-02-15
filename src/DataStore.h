@@ -20,8 +20,8 @@
 #ifndef SHAREMIND_MINER_DATASTORE_H
 #define SHAREMIND_MINER_DATASTORE_H
 
-#ifndef SHAREMIND_INTERNAL__
-#error SHAREMIND_INTERNAL__ not defined
+#ifndef SHAREMIND_INTERNAL_
+#error SHAREMIND_INTERNAL_ not defined
 #endif
 
 #include <cassert>

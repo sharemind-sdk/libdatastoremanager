@@ -20,9 +20,7 @@
 #include "DataStoreManager.h"
 
 #include <cassert>
-#include <sharemind/libprocessfacility.h>
 #include "DataStore.h"
-#include "DataStoreFactory.h"
 
 
 namespace {
@@ -45,7 +43,7 @@ SharemindDataStoreFactory * SharemindDataStoreManager_get_datastore_factory(
         // Get the factory object
         const SharemindProcessFacility & pf =
                 *static_cast<SharemindProcessFacility *>(ctx->process_internal);
-        return dsMan.factoryWrapper(pf.get_process_id(&pf));
+        return dsMan.factoryWrapper(pf.processId(&pf));
     } catch (...) {
         return nullptr;
     }
@@ -67,7 +65,7 @@ SharemindDataStore * SharemindDataStoreManager_get_datastore(
                 *static_cast<sharemind::DataStoreManager *>(manager->internal);
         const SharemindProcessFacility & pf =
                 *static_cast<SharemindProcessFacility *>(ctx->process_internal);
-        return dsMan.dataStoreWrapper(pf.get_process_id(&pf), name);
+        return dsMan.dataStoreWrapper(pf.processId(&pf), name);
     } catch (...) {
         return nullptr;
     }
