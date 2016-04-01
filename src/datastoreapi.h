@@ -33,26 +33,10 @@ extern "C" {
 /** Forward declarations: */
 typedef void (*sharemind_datastore_destroy_fn_ptr)(void *);
 
-struct SharemindDataStoreManager_;
-typedef SharemindDataStoreManager_ SharemindDataStoreManager;
 struct SharemindDataStoreFactory_;
 typedef SharemindDataStoreFactory_ SharemindDataStoreFactory;
 struct SharemindDataStore_;
 typedef SharemindDataStore_ SharemindDataStore;
-
-
-/*******************************************************************************
-    SharemindDataStoreManager
-*******************************************************************************/
-
-/** Wrapper object */
-struct SharemindDataStoreManager_ {
-    SHAREMIND_ICONST void * SHAREMIND_ICONST internal;
-
-    SharemindDataStore * (* get_datastore)(SharemindDataStoreManager * manager,
-                                           const SharemindModuleApi0x1SyscallContext * ctx,
-                                           const char * name);
-};
 
 
 /*******************************************************************************

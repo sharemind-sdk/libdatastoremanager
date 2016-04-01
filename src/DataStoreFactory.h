@@ -33,9 +33,6 @@
 
 namespace sharemind {
 
-//class DataStore;
-class DataStoreManager;
-
 class DataStoreFactory {
 
 public: /* Types: */

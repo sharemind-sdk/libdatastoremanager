@@ -20,7 +20,6 @@
 #include "DataStoreFactory.h"
 
 #include <cassert>
-#include "DataStoreManager.h"
 
 
 namespace {
