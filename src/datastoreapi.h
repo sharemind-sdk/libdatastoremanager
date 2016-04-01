@@ -49,8 +49,6 @@ typedef SharemindDataStore_ SharemindDataStore;
 struct SharemindDataStoreManager_ {
     SHAREMIND_ICONST void * SHAREMIND_ICONST internal;
 
-    SharemindDataStoreFactory * (* get_datastore_factory)(SharemindDataStoreManager * manager,
-                                                          const SharemindModuleApi0x1SyscallContext * ctx);
     SharemindDataStore * (* get_datastore)(SharemindDataStoreManager * manager,
                                            const SharemindModuleApi0x1SyscallContext * ctx,
                                            const char * name);

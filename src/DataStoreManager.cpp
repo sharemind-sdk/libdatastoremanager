@@ -28,29 +28,6 @@
 namespace {
 extern "C" {
 
-SharemindDataStoreFactory * SharemindDataStoreManager_get_datastore_factory(
-        SharemindDataStoreManager * manager,
-        const SharemindModuleApi0x1SyscallContext * ctx)
-{
-    assert(manager);
-    assert(manager->internal);
-    assert(ctx);
-    assert(ctx->process_internal);
-
-    try {
-        // Get the manager object
-        const sharemind::DataStoreManager & dsMan =
-                *static_cast<sharemind::DataStoreManager *>(manager->internal);
-
-        // Get the factory object
-        const SharemindProcessFacility & pf =
-                *static_cast<SharemindProcessFacility *>(ctx->process_internal);
-        return dsMan.factoryWrapper(pf.get_process_id(&pf));
-    } catch (...) {
-        return nullptr;
-    }
-}
-
 SharemindDataStore * SharemindDataStoreManager_get_datastore(
         SharemindDataStoreManager * manager,
         const SharemindModuleApi0x1SyscallContext * ctx,
@@ -81,7 +58,6 @@ namespace sharemind {
 
 DataStoreManager::DataStoreManager() {
     m_wrapper.internal = this;
-    m_wrapper.get_datastore_factory = &SharemindDataStoreManager_get_datastore_factory;
     m_wrapper.get_datastore = &SharemindDataStoreManager_get_datastore;
 }
 
