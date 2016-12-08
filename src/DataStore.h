@@ -45,11 +45,39 @@ public: /* Types: */
 private: /* Types: */
 
     struct Value {
+
+    /* Methods: */
+
+        Value(Value const & copy) = delete;
+        Value & operator=(Value const & rhs) = delete;
+
         inline Value(void * const v) noexcept : value(v) {}
+
+        inline Value(Value && move) noexcept
+            : value(move.value)
+            , destroyFn(move.destroyFn)
+        {
+            move.value = nullptr;
+            move.destroyFn = nullptr;
+        }
+
         inline ~Value() noexcept {
             if (destroyFn)
                 (*destroyFn)(value);
         }
+
+        inline Value & operator=(Value && rhs) noexcept {
+            if (destroyFn)
+                (*destroyFn)(value);
+            value = rhs.value;
+            destroyFn = rhs.destroyFn;
+            rhs.value = nullptr;
+            rhs.destroyFn = nullptr;
+            return *this;
+        }
+
+    /* Fields: */
+
         void * value;
         sharemind_datastore_destroy_fn_ptr destroyFn = nullptr;
     };
@@ -70,7 +98,7 @@ public: /* Methods: */
              void * const value,
              sharemind_datastore_destroy_fn_ptr const destroyFn)
     {
-        auto const r = m_values.insert({std::forward<K>(key), Value{value}});
+        auto const r = m_values.emplace(std::forward<K>(key), Value{value});
         if (r.second)
             r.first->second.destroyFn = destroyFn;
         return r.second;
