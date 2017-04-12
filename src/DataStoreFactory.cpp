@@ -20,6 +20,8 @@
 #include "DataStoreFactory.h"
 
 #include <cassert>
+#include <sharemind/MakeUnique.h>
+#include <sharemind/DebugOnly.h>
 
 
 namespace {
@@ -52,27 +54,17 @@ DataStore::Wrapper & DataStoreFactory::dataStoreWrapper(
         const std::string & name)
 {
     // Check for an existing data store
-    DataStoreMap::const_iterator const it{m_dataStores.find(name)};
+    auto const it(m_dataStores.find(name));
     if (it != m_dataStores.cend())
         return it->second->wrapper();
 
     // Create a new data store
-    DataStore * const ds = new DataStore{*this};
-    try {
-        #ifndef NDEBUG
-        bool const r =
-        #endif
-                m_dataStores.insert(name, ds)
-        #ifndef NDEBUG
-                    .second
-        #endif
-                ;
-        assert(r);
-    } catch (...) {
-        delete ds;
-        throw;
-    }
-    return ds->wrapper();
+    auto ds(makeUnique<DataStore>(*this));
+    auto & r(ds->wrapper());
+    SHAREMIND_DEBUG_ONLY(auto const rit =)
+            m_dataStores.emplace(name, std::move(ds));
+    assert(rit.second);
+    return r;
 }
 
 } /* namespace sharemind { */

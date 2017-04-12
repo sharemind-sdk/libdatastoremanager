@@ -27,7 +27,8 @@
 #include "datastoreapi.h"
 
 #include <string>
-#include <sharemind/ScopedObjectMap.h>
+#include <map>
+#include <memory>
 #include "DataStore.h"
 
 
@@ -38,10 +39,6 @@ class DataStoreFactory {
 public: /* Types: */
 
     using Wrapper = ::SharemindDataStoreFactory;
-
-private: /* Types: */
-
-    using DataStoreMap = ScopedObjectMap<std::string, DataStore>;
 
 public: /* Methods: */
 
@@ -58,7 +55,7 @@ private: /* Fields: */
 
     Wrapper m_wrapper;
 
-    DataStoreMap m_dataStores;
+    std::map<std::string, std::unique_ptr<DataStore> > m_dataStores;
 
 }; /* class DataStoreFactory { */
 } /* namespace sharemind { */
