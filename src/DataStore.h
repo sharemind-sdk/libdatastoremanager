@@ -26,7 +26,6 @@
 
 #include <cassert>
 #include <map>
-#include <sharemind/compiler-support/GccPR44436.h>
 #include <string>
 #include <utility>
 #include "datastoreapi.h"
