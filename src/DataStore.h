@@ -48,8 +48,10 @@ private: /* Types: */
 
     /* Methods: */
 
-        void operator()(void * value) const noexcept
-        { return (*m_destroyer)(value); }
+        void operator()(void * value) const noexcept {
+            if (m_destroyer)
+                return (*m_destroyer)(value);
+        }
 
     /* Fields: */
 
