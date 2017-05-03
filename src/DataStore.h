@@ -44,18 +44,14 @@ public: /* Types: */
 
 private: /* Types: */
 
-    class Deleter {
+    struct Deleter {
 
-    public: /* Methods: */
-
-        Deleter(sharemind_datastore_destroy_fn_ptr destroyer) noexcept
-            : m_destroyer(std::move(destroyer))
-        {}
+    /* Methods: */
 
         void operator()(void * value) const noexcept
         { return (*m_destroyer)(value); }
 
-    private: /* Fields: */
+    /* Fields: */
 
         sharemind_datastore_destroy_fn_ptr m_destroyer;
 
@@ -78,7 +74,7 @@ public: /* Methods: */
              sharemind_datastore_destroy_fn_ptr const destroyFn)
     {
         return m_values.emplace(std::forward<K>(key),
-                                Value(value, Deleter(destroyFn))).second;
+                                Value(value, Deleter{destroyFn})).second;
     }
 
     inline void * get(const std::string & key) const noexcept {
