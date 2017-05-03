@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Cybernetica
+ * Copyright (C) 2015-2017 Cybernetica
  *
  * Research/Commercial License Usage
  * Licensees holding a valid Research License or Commercial License
@@ -26,6 +26,7 @@
 
 #include <cassert>
 #include <map>
+#include <memory>
 #include <string>
 #include <utility>
 #include "datastoreapi.h"
@@ -43,45 +44,24 @@ public: /* Types: */
 
 private: /* Types: */
 
-    struct Value {
+    class Deleter {
 
-    /* Methods: */
+    public: /* Methods: */
 
-        Value(Value const & copy) = delete;
-        Value & operator=(Value const & rhs) = delete;
+        Deleter(sharemind_datastore_destroy_fn_ptr destroyer) noexcept
+            : m_destroyer(std::move(destroyer))
+        {}
 
-        inline Value(void * const v) noexcept : value(v) {}
+        void operator()(void * value) const noexcept
+        { return (*m_destroyer)(value); }
 
-        inline Value(Value && move) noexcept
-            : value(move.value)
-            , destroyFn(move.destroyFn)
-        {
-            move.value = nullptr;
-            move.destroyFn = nullptr;
-        }
+    private: /* Fields: */
 
-        inline ~Value() noexcept {
-            if (destroyFn)
-                (*destroyFn)(value);
-        }
+        sharemind_datastore_destroy_fn_ptr m_destroyer;
 
-        inline Value & operator=(Value && rhs) noexcept {
-            if (destroyFn)
-                (*destroyFn)(value);
-            value = rhs.value;
-            destroyFn = rhs.destroyFn;
-            rhs.value = nullptr;
-            rhs.destroyFn = nullptr;
-            return *this;
-        }
-
-    /* Fields: */
-
-        void * value;
-        sharemind_datastore_destroy_fn_ptr destroyFn = nullptr;
     };
 
-    using ValueMap = std::map<std::string, Value>;
+    using Value = std::unique_ptr<void, Deleter>;
 
 public: /* Methods: */
 
@@ -97,15 +77,13 @@ public: /* Methods: */
              void * const value,
              sharemind_datastore_destroy_fn_ptr const destroyFn)
     {
-        auto const r = m_values.emplace(std::forward<K>(key), Value{value});
-        if (r.second)
-            r.first->second.destroyFn = destroyFn;
-        return r.second;
+        return m_values.emplace(std::forward<K>(key),
+                                Value(value, Deleter(destroyFn))).second;
     }
 
     inline void * get(const std::string & key) const noexcept {
-        ValueMap::const_iterator const it = m_values.find(key);
-        return it != m_values.end() ? it->second.value : nullptr;
+        auto const it(m_values.find(key));
+        return it != m_values.end() ? it->second.get() : nullptr;
     }
 
     inline bool remove(const std::string & key)
@@ -117,7 +95,7 @@ public: /* Methods: */
 private: /* Fields: */
 
     Wrapper m_wrapper;
-    ValueMap m_values;
+    std::map<std::string, Value> m_values;
 
 }; /* class DataStore { */
 } /* namespace sharemind { */
