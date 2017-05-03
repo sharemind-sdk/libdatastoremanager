@@ -53,7 +53,7 @@ private: /* Types: */
 
     /* Fields: */
 
-        sharemind_datastore_destroy_fn_ptr m_destroyer;
+        sharemind_datastore_destroy_fn_ptr const m_destroyer;
 
     };
 
