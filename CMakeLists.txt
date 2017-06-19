@@ -23,7 +23,11 @@ PROJECT(SharemindLibDataStoreManager CXX)
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/config.local" OPTIONAL)
 INCLUDE("${CMAKE_CURRENT_BINARY_DIR}/config.local" OPTIONAL)
 
-SET(LIBDATASTOREMANAGER_VERSION "0.1.0")
+SET(CPACK_PACKAGE_VERSION_MAJOR "0")
+SET(CPACK_PACKAGE_VERSION_MINOR "1")
+SET(CPACK_PACKAGE_VERSION_PATCH "0")
+SET(LIBDATASTOREMANAGER_VERSION
+    "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
 SET(Boost_USE_STATIC_RUNTIME OFF)
 FIND_PACKAGE(SharemindCxxHeaders REQUIRED)
@@ -72,17 +76,26 @@ FILE(GLOB_RECURSE LIBDATASTOREMANAGER_SOURCES
      "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 FILE(GLOB_RECURSE LIBDATASTOREMANAGER_HEADERS
      "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
+SET(LIBDATASTOREMANAGER_API_HEADERS
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/datastoreapi.h")
+LIST(REMOVE_ITEM LIBDATASTOREMANAGER_HEADERS ${LIBDATASTOREMANAGER_API_HEADERS})
 ADD_LIBRARY("libdatastoremanager" SHARED ${LIBDATASTOREMANAGER_SOURCES}
-                                          ${LIBDATASTOREMANAGER_HEADERS})
+                                          ${LIBDATASTOREMANAGER_HEADERS}
+                                          ${LIBDATASTOREMANAGER_API_HEADERS})
 SET_TARGET_PROPERTIES("libdatastoremanager" PROPERTIES
                       OUTPUT_NAME "sharemind_datastoremanager"
                       VERSION "${LIBDATASTOREMANAGER_VERSION}"
                       SOVERSION "0.1")
 TARGET_LINK_LIBRARIES("libdatastoremanager"
                       ${LIBDATASTOREMANAGER_EXTERNAL_LINK_LIBRARIES})
-INSTALL(TARGETS "libdatastoremanager" LIBRARY DESTINATION "lib")
+INSTALL(TARGETS "libdatastoremanager" COMPONENT lib LIBRARY DESTINATION "lib")
 
-INSTALL(FILES ${LIBDATASTOREMANAGER_HEADERS} DESTINATION "include/sharemind")
+INSTALL(FILES ${LIBDATASTOREMANAGER_API_HEADERS}
+        DESTINATION "include/sharemind"
+        COMPONENT api-dev)
+INSTALL(FILES ${LIBDATASTOREMANAGER_HEADERS}
+        DESTINATION "include/sharemind"
+        COMPONENT dev)
 
 FILE(GLOB_RECURSE LIBDATASTOREMANAGER_INFILES
      "${CMAKE_CURRENT_SOURCE_DIR}/*.in")
@@ -95,11 +108,41 @@ CONFIGURE_FILE(
   @ONLY)
 INSTALL(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/SharemindLibDataStoreManagerConfig.cmake"
-  DESTINATION "lib/SharemindLibDataStoreManager")
+  DESTINATION "lib/SharemindLibDataStoreManager"
+  COMPONENT common-dev)
 CONFIGURE_FILE(
   "${CMAKE_CURRENT_SOURCE_DIR}/SharemindLibDataStoreManagerConfigVersion.cmake.in"
   "${CMAKE_CURRENT_BINARY_DIR}/SharemindLibDataStoreManagerConfigVersion.cmake"
   @ONLY)
 INSTALL(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/SharemindLibDataStoreManagerConfigVersion.cmake"
-  DESTINATION "lib/SharemindLibDataStoreManager")
+  DESTINATION "lib/SharemindLibDataStoreManager"
+  COMPONENT common-dev)
+
+
+# Packaging:
+SET(CPACK_PACKAGE_VENDOR "Cybernetica AS")
+SET(CPACK_PACKAGE_CONTACT "Sharemind packaging <sharemind-packaging@cyber.ee>")
+SET(CPACK_GENERATOR "DEB")
+SET(CPACK_DEBIAN_PACKAGE_NAME "libsharemind-datastoremanager")
+SET(CPACK_DEBIAN_PACKAGE_RELEASE "cyber1")
+SET(CPACK_DEBIAN_COMPRESSION_TYPE "xz")
+SET(CPACK_DEB_COMPONENT_INSTALL "ON")
+SET(CPACK_DEBIAN_FILE_NAME "DEB-DEFAULT")
+
+SET(CPACK_DEBIAN_LIB_PACKAGE_NAME "libsharemind-datastoremanager")
+SET(CPACK_COMPONENT_COMMON-DEV_DESCRIPTION "Sharemind Data Store Manager library common development files")
+SET(CPACK_COMPONENT_DEV_DESCRIPTION "Sharemind Data Store Manager library development headers")
+SET(CPACK_COMPONENT_API-DEV_DESCRIPTION "Sharemind Data Store Manager library API headers")
+SET(CPACK_COMPONENT_LIB_DESCRIPTION "Sharemind Data Store Manager library")
+SET(CPACK_DEBIAN_API-DEV_PACKAGE_DEPENDS
+    "libsharemind-modapi-dev (>= 0.3.0), libgcc-4.8-dev | libgcc-4.9-dev | libgcc-5-dev | libgcc-6-dev | libgcc-7-dev")
+SET(CPACK_DEBIAN_DEV_PACKAGE_DEPENDS
+    "libsharemind-datastoremanager (>= ${LIBDATASTOREMANAGER_VERSION}), libsharemind-datastoremanager-api-dev (>= ${LIBDATASTOREMANAGER_VERSION}), libsharemind-cxxheaders-dev (>= 0.1.0), libstdc++-dev")
+SET(CPACK_DEBIAN_LIB_PACKAGE_DEPENDS "libstdc++6 (>= 4.8.0)")
+SET(CPACK_DEBIAN_COMMON-DEV_PACKAGE_SECTION "libdevel")
+SET(CPACK_DEBIAN_API-DEV_PACKAGE_SECTION "libdevel")
+SET(CPACK_DEBIAN_DEV_PACKAGE_SECTION "libdevel")
+SET(CPACK_DEBIAN_LIB_PACKAGE_SECTION "libs")
+SET(CPACK_DEBIAN_DEV_PACKAGE_ARCHITECTURE "any")
+INCLUDE(CPack)
