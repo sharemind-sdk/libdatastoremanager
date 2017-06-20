@@ -136,7 +136,7 @@ SET(CPACK_COMPONENT_DEV_DESCRIPTION "Sharemind Data Store Manager library develo
 SET(CPACK_COMPONENT_API-DEV_DESCRIPTION "Sharemind Data Store Manager library API headers")
 SET(CPACK_COMPONENT_LIB_DESCRIPTION "Sharemind Data Store Manager library")
 SET(CPACK_DEBIAN_API-DEV_PACKAGE_DEPENDS
-    "libsharemind-modapi-dev (>= 0.3.0), libgcc-4.8-dev | libgcc-4.9-dev | libgcc-5-dev | libgcc-6-dev | libgcc-7-dev")
+    "libgcc-4.8-dev | libgcc-4.9-dev | libgcc-5-dev | libgcc-6-dev | libgcc-7-dev")
 SET(CPACK_DEBIAN_DEV_PACKAGE_DEPENDS
     "libsharemind-datastoremanager (>= ${LIBDATASTOREMANAGER_VERSION}), libsharemind-datastoremanager-api-dev (>= ${LIBDATASTOREMANAGER_VERSION}), libsharemind-cxxheaders-dev (>= 0.1.0), libstdc++-dev")
 SET(CPACK_DEBIAN_LIB_PACKAGE_DEPENDS "libstdc++6 (>= 4.8.0)")
