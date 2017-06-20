@@ -17,8 +17,8 @@
  * For further information, please contact us at sharemind@cyber.ee.
  */
 
-#ifndef SHAREMIND_MINER_DATASTOREAPI_H
-#define SHAREMIND_MINER_DATASTOREAPI_H
+#ifndef SHAREMIND_LIBDATASTOREMANAGER_DATASTOREAPI_H
+#define SHAREMIND_LIBDATASTOREMANAGER_DATASTOREAPI_H
 
 #include <sharemind/libmodapi/api_0x1.h>
 #include <stdbool.h>
@@ -72,4 +72,4 @@ struct SharemindDataStore_ {
 } /* extern "C" { */
 #endif
 
-#endif /* SHAREMIND_MINER_DATASTOREAPI_H */
+#endif /* SHAREMIND_LIBDATASTOREMANAGER_DATASTOREAPI_H */

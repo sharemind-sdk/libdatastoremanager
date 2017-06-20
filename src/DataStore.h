@@ -17,8 +17,8 @@
  * For further information, please contact us at sharemind@cyber.ee.
  */
 
-#ifndef SHAREMIND_MINER_DATASTORE_H
-#define SHAREMIND_MINER_DATASTORE_H
+#ifndef SHAREMIND_LIBDATASTOREMANAGER_DATASTORE_H
+#define SHAREMIND_LIBDATASTOREMANAGER_DATASTORE_H
 
 #ifndef SHAREMIND_INTERNAL_
 #error SHAREMIND_INTERNAL_ not defined
@@ -98,4 +98,4 @@ private: /* Fields: */
 }; /* class DataStore { */
 } /* namespace sharemind { */
 
-#endif /* SHAREMIND_MINER_DATASTORE_H */
+#endif /* SHAREMIND_LIBDATASTOREMANAGER_DATASTORE_H */
