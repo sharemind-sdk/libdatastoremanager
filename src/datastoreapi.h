@@ -20,13 +20,20 @@
 #ifndef SHAREMIND_LIBDATASTOREMANAGER_DATASTOREAPI_H
 #define SHAREMIND_LIBDATASTOREMANAGER_DATASTOREAPI_H
 
-#include <sharemind/libmodapi/api_0x1.h>
 #include <stdbool.h>
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#ifndef SHAREMIND_ICONST
+#ifdef SHAREMIND_INTERNAL_
+#define SHAREMIND_ICONST
+#else
+#define SHAREMIND_ICONST const
+#endif
+#endif /* SHAREMIND_ICONST */
 
 // TODO documentation
 
