@@ -17,133 +17,117 @@
 # For further information, please contact us at sharemind@cyber.ee.
 #
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
-PROJECT(SharemindLibDataStoreManager CXX)
+CMAKE_MINIMUM_REQUIRED(VERSION "3.0")
+PROJECT(SharemindLibDataStoreManager VERSION "0.1.0" LANGUAGES "CXX")
 
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/config.local" OPTIONAL)
 INCLUDE("${CMAKE_CURRENT_BINARY_DIR}/config.local" OPTIONAL)
 
-SET(CPACK_PACKAGE_VERSION_MAJOR "0")
-SET(CPACK_PACKAGE_VERSION_MINOR "1")
-SET(CPACK_PACKAGE_VERSION_PATCH "0")
-SET(LIBDATASTOREMANAGER_SOVERSION
-    "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}")
-SET(LIBDATASTOREMANAGER_VERSION
-    "${LIBDATASTOREMANAGER_SOVERSION}.${CPACK_PACKAGE_VERSION_PATCH}")
+FIND_PACKAGE(SharemindCMakeHelpers REQUIRED)
+
+SharemindSetProjectVersion()
 
 SET(Boost_USE_STATIC_RUNTIME OFF)
 FIND_PACKAGE(SharemindCxxHeaders REQUIRED)
 
-SET(LIBDATASTOREMANAGER_EXTERNAL_LINK_LIBRARIES "")
-LIST(APPEND LIBDATASTOREMANAGER_EXTERNAL_LINK_LIBRARIES
+
+# API headers:
+SET(SharemindLibDataStoreManager_API_HEADERS
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/datastoreapi.h")
+INSTALL(FILES ${SharemindLibDataStoreManager_API_HEADERS}
+        DESTINATION "include/sharemind"
+        COMPONENT "api-dev")
+
+# Headers:
+FILE(GLOB_RECURSE SharemindLibDataStoreManager_HEADERS
+     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
+LIST(REMOVE_ITEM SharemindLibDataStoreManager_HEADERS ${SharemindLibDataStoreManager_API_HEADERS})
+INSTALL(FILES ${SharemindLibDataStoreManager_HEADERS}
+        DESTINATION "include/sharemind"
+        COMPONENT "dev")
+
+# The library:
+SharemindNewUniqueList(SharemindLibDataStoreManager_LINK_LIBRARIES
     ${SharemindCxxHeaders_LIBRARIES}
 )
-SET(LIBDATASTOREMANAGER_EXTERNAL_INCLUDE_DIRS "")
-LIST(APPEND LIBDATASTOREMANAGER_EXTERNAL_INCLUDE_DIRS
+SharemindNewUniqueList(SharemindLibDataStoreManager_INCLUDE_DIRS
     ${SharemindCxxHeaders_INCLUDE_DIRS}
 )
-SET(LIBDATASTOREMANAGER_EXTERNAL_DEFINITIONS "")
-LIST(APPEND LIBDATASTOREMANAGER_EXTERNAL_DEFINITIONS
+SharemindNewUniqueList(SharemindLibDataStoreManager_DEFINITIONS
     ${SharemindCxxHeaders_DEFINITIONS}
 )
-LIST(REMOVE_DUPLICATES LIBDATASTOREMANAGER_EXTERNAL_LINK_LIBRARIES)
-LIST(REMOVE_DUPLICATES LIBDATASTOREMANAGER_EXTERNAL_INCLUDE_DIRS)
-LIST(REMOVE_DUPLICATES LIBDATASTOREMANAGER_EXTERNAL_DEFINITIONS)
-
-
-SET(LIBDATASTOREMANAGER_INSTALL_LINK_LIBRARIES
-    ${LIBDATASTOREMANAGER_EXTERNAL_LINK_LIBRARIES}
-    "-L${CMAKE_INSTALL_PREFIX}/lib" "-lsharemind_datastoremanager")
-SET(LIBDATASTOREMANAGER_INSTALL_INCLUDE_DIRS
-    "${CMAKE_INSTALL_PREFIX}/include"
-    ${LIBDATASTOREMANAGER_EXTERNAL_INCLUDE_DIRS})
-SET(LIBDATASTOREMANAGER_INSTALL_DEFINITIONS
-    ${LIBDATASTOREMANAGER_EXTERNAL_DEFINITIONS})
-LIST(REMOVE_DUPLICATES LIBDATASTOREMANAGER_INSTALL_INCLUDE_DIRS)
-
-INCLUDE_DIRECTORIES(${LIBDATASTOREMANAGER_EXTERNAL_INCLUDE_DIRS})
-ADD_DEFINITIONS(
-    ${LIBDATASTOREMANAGER_EXTERNAL_DEFINITIONS}
-    "-DSHAREMIND_INTERNAL_"
-)
-ADD_COMPILE_OPTIONS(
-  "-std=c++11" "-Wall" "-Wextra" "-O2" "-fPIC"
-  "$<$<NOT:$<STREQUAL:$<CONFIGURATION>,Release>>:-ggdb>"
-  "$<$<NOT:$<STREQUAL:$<CONFIGURATION>,Release>>:-fno-omit-frame-pointer>"
-  "$<$<STREQUAL:$<CONFIGURATION>,Release>:-DNDEBUG>"
-  "$<$<STREQUAL:$<CONFIGURATION>,Release>:-fomit-frame-pointer>"
-)
-
-FILE(GLOB_RECURSE LIBDATASTOREMANAGER_SOURCES
+SharemindSetCxx11CompileOptions()
+FILE(GLOB_RECURSE SharemindLibDataStoreManager_SOURCES
      "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
-FILE(GLOB_RECURSE LIBDATASTOREMANAGER_HEADERS
-     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
-SET(LIBDATASTOREMANAGER_API_HEADERS
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/datastoreapi.h")
-LIST(REMOVE_ITEM LIBDATASTOREMANAGER_HEADERS ${LIBDATASTOREMANAGER_API_HEADERS})
-ADD_LIBRARY("libdatastoremanager" SHARED ${LIBDATASTOREMANAGER_SOURCES}
-                                          ${LIBDATASTOREMANAGER_HEADERS}
-                                          ${LIBDATASTOREMANAGER_API_HEADERS})
-SET_TARGET_PROPERTIES("libdatastoremanager" PROPERTIES
-                      OUTPUT_NAME "sharemind_datastoremanager"
-                      VERSION "${LIBDATASTOREMANAGER_VERSION}"
-                      SOVERSION "${LIBDATASTOREMANAGER_SOVERSION}")
-TARGET_LINK_LIBRARIES("libdatastoremanager"
-                      ${LIBDATASTOREMANAGER_EXTERNAL_LINK_LIBRARIES})
-INSTALL(TARGETS "libdatastoremanager" COMPONENT lib LIBRARY DESTINATION "lib")
+SharemindAddSharedLibrary("libdatastoremanager"
+    OUTPUT_NAME "sharemind_datastoremanager"
+    SOURCES
+        ${SharemindLibDataStoreManager_SOURCES}
+        ${SharemindLibDataStoreManager_HEADERS}
+        ${SharemindLibDataStoreManager_API_HEADERS}
+    INCLUDE_DIRECTORIES
+        ${SharemindLibDataStoreManager_INCLUDE_DIRS}
+    LEGACY_DEFINITIONS
+        ${SharemindLibDataStoreManager_DEFINITIONS}
+    COMPILE_DEFINITIONS
+        "SHAREMIND_INTERNAL_"
+    LINK_LIBRARIES
+        ${SharemindLibDataStoreManager_LINK_LIBRARIES}
+)
 
-INSTALL(FILES ${LIBDATASTOREMANAGER_API_HEADERS}
-        DESTINATION "include/sharemind"
-        COMPONENT api-dev)
-INSTALL(FILES ${LIBDATASTOREMANAGER_HEADERS}
-        DESTINATION "include/sharemind"
-        COMPONENT dev)
-
-FILE(GLOB_RECURSE LIBDATASTOREMANAGER_INFILES
-     "${CMAKE_CURRENT_SOURCE_DIR}/*.in")
-ADD_CUSTOM_TARGET("include_LIBDATASTOREMANAGER_INFILES_in_IDE"
-                  SOURCES ${LIBDATASTOREMANAGER_INFILES})
-
-CONFIGURE_FILE(
-  "${CMAKE_CURRENT_SOURCE_DIR}/SharemindLibDataStoreManagerConfig.cmake.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/SharemindLibDataStoreManagerConfig.cmake"
-  @ONLY)
-INSTALL(FILES
-  "${CMAKE_CURRENT_BINARY_DIR}/SharemindLibDataStoreManagerConfig.cmake"
-  DESTINATION "lib/SharemindLibDataStoreManager"
-  COMPONENT common-dev)
-CONFIGURE_FILE(
-  "${CMAKE_CURRENT_SOURCE_DIR}/SharemindLibDataStoreManagerConfigVersion.cmake.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/SharemindLibDataStoreManagerConfigVersion.cmake"
-  @ONLY)
-INSTALL(FILES
-  "${CMAKE_CURRENT_BINARY_DIR}/SharemindLibDataStoreManagerConfigVersion.cmake"
-  DESTINATION "lib/SharemindLibDataStoreManager"
-  COMPONENT common-dev)
+# Install CMake files:
+SharemindNewUniqueList(SharemindLibDataStoreManager_INSTALL_LINK_LIBRARIES
+    ${SharemindLibDataStoreManager_LINK_LIBRARIES}
+    "-L${CMAKE_INSTALL_PREFIX}/lib" "-lsharemind_datastoremanager")
+SharemindNewUniqueList(SharemindLibDataStoreManager_INSTALL_INCLUDE_DIRS
+    "${CMAKE_INSTALL_PREFIX}/include"
+    ${SharemindLibDataStoreManager_INCLUDE_DIRS})
+SharemindNewUniqueList(SharemindLibDataStoreManager_INSTALL_DEFINITIONS
+    ${SharemindLibDataStoreManager_DEFINITIONS})
+SharemindUseCMakeFindFiles(COMPONENT "common-dev")
 
 
 # Packaging:
-SET(CPACK_PACKAGE_VENDOR "Cybernetica AS")
-SET(CPACK_PACKAGE_CONTACT "Sharemind packaging <sharemind-packaging@cyber.ee>")
-SET(CPACK_GENERATOR "DEB")
-SET(CPACK_DEBIAN_PACKAGE_NAME "libsharemind-datastoremanager")
-SET(CPACK_DEBIAN_PACKAGE_RELEASE "cyber1")
-SET(CPACK_DEBIAN_COMPRESSION_TYPE "xz")
-SET(CPACK_DEB_COMPONENT_INSTALL "ON")
-SET(CPACK_DEBIAN_FILE_NAME "DEB-DEFAULT")
-
-SET(CPACK_DEBIAN_LIB_PACKAGE_NAME "libsharemind-datastoremanager")
-SET(CPACK_COMPONENT_COMMON-DEV_DESCRIPTION "Sharemind Data Store Manager library common development files")
-SET(CPACK_COMPONENT_DEV_DESCRIPTION "Sharemind Data Store Manager library development headers")
-SET(CPACK_COMPONENT_API-DEV_DESCRIPTION "Sharemind Data Store Manager library API headers")
-SET(CPACK_COMPONENT_LIB_DESCRIPTION "Sharemind Data Store Manager library")
-SET(CPACK_DEBIAN_API-DEV_PACKAGE_DEPENDS
-    "libgcc-4.8-dev | libgcc-4.9-dev | libgcc-5-dev | libgcc-6-dev | libgcc-7-dev")
-SET(CPACK_DEBIAN_DEV_PACKAGE_DEPENDS
-    "libsharemind-datastoremanager (>= ${LIBDATASTOREMANAGER_VERSION}), libsharemind-datastoremanager-api-dev (>= ${LIBDATASTOREMANAGER_VERSION}), libsharemind-cxxheaders-dev (>= 0.1.0), libstdc++-dev")
-SET(CPACK_DEBIAN_LIB_PACKAGE_DEPENDS "libstdc++6 (>= 4.8.0)")
-SET(CPACK_DEBIAN_COMMON-DEV_PACKAGE_SECTION "libdevel")
-SET(CPACK_DEBIAN_API-DEV_PACKAGE_SECTION "libdevel")
-SET(CPACK_DEBIAN_DEV_PACKAGE_SECTION "libdevel")
-SET(CPACK_DEBIAN_LIB_PACKAGE_SECTION "libs")
-INCLUDE(CPack)
+SharemindSetupPackaging()
+SharemindAddComponentPackage("lib"
+    NAME "libsharemind-datastoremanager"
+    DESCRIPTION "Sharemind Data Store Manager library"
+    DEB_SECTION "libs"
+    DEB_DEPENDS "libstdc++6 (>= 4.8.0)"
+)
+SharemindAddComponentPackage("common-dev"
+    NAME "libsharemind-datastoremanager-common-dev"
+    DESCRIPTION "Sharemind Data Store Manager library common development files"
+    DEB_SECTION "libdevel"
+)
+SharemindAddComponentPackage("api-dev"
+    NAME "libsharemind-datastoremanager-api-dev"
+    DESCRIPTION "Sharemind Data Store Manager library API headers"
+    DEB_SECTION "libdevel"
+    DEB_DEPENDS
+        "libsharemind-datastoremanager-common-dev (>= ${SharemindLibDataStoreManager_VERSION})"
+        "libgcc-4.8-dev"
+        "| libgcc-4.9-dev"
+        "| libgcc-5-dev"
+        "| libgcc-6-dev"
+        "| libgcc-7-dev"
+)
+SharemindAddComponentPackage("dev"
+    NAME "libsharemind-datastoremanager-dev"
+    DESCRIPTION "Sharemind Data Store Manager library development headers"
+    DEB_SECTION "libdevel"
+    DEB_DEPENDS
+        "libsharemind-datastoremanager (>= ${SharemindLibDataStoreManager_VERSION})"
+        "libsharemind-datastoremanager-api-dev (>= ${SharemindLibDataStoreManager_VERSION})"
+        "libsharemind-datastoremanager-common-dev (>= ${SharemindLibDataStoreManager_VERSION})"
+        "libsharemind-cxxheaders-dev (>= 0.1.0)"
+        "libstdc++-dev"
+)
+SharemindAddComponentPackage("debug"
+    NAME "libsharemind-datastoremanager-dbg"
+    DESCRIPTION "Sharemind Data Store Manager library debug symbols"
+    DEB_SECTION "debug"
+    DEB_DEPENDS
+        "libsharemind-datastoremanager (>= ${SharemindLibDataStoreManager_VERSION})"
+)
+SharemindPackagingFinalize()

@@ -23,6 +23,6 @@
 #   SharemindLibDataStoreManager_DEFINITIONS  - required compiler definitions
 
 
-SET(SharemindLibDataStoreManager_INCLUDE_DIRS @LIBDATASTOREMANAGER_INSTALL_INCLUDE_DIRS@)
-SET(SharemindLibDataStoreManager_LIBRARIES @LIBDATASTOREMANAGER_INSTALL_LINK_LIBRARIES@)
-SET(SharemindLibDataStoreManager_DEFINITIONS @LIBDATASTOREMANAGER_INSTALL_DEFINITIONS@)
+SET(SharemindLibDataStoreManager_INCLUDE_DIRS @SharemindLibDataStoreManager_INSTALL_INCLUDE_DIRS@)
+SET(SharemindLibDataStoreManager_LIBRARIES @SharemindLibDataStoreManager_INSTALL_LINK_LIBRARIES@)
+SET(SharemindLibDataStoreManager_DEFINITIONS @SharemindLibDataStoreManager_INSTALL_DEFINITIONS@)
