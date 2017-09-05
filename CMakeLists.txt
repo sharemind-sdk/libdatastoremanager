@@ -76,15 +76,18 @@ SharemindAddSharedLibrary("libdatastoremanager"
 )
 
 # Install CMake files:
-SharemindNewUniqueList(SharemindLibDataStoreManager_INSTALL_LINK_LIBRARIES
-    ${SharemindLibDataStoreManager_LINK_LIBRARIES}
-    "-L${CMAKE_INSTALL_PREFIX}/lib" "-lsharemind_datastoremanager")
-SharemindNewUniqueList(SharemindLibDataStoreManager_INSTALL_INCLUDE_DIRS
-    "${CMAKE_INSTALL_PREFIX}/include"
-    ${SharemindLibDataStoreManager_INCLUDE_DIRS})
-SharemindNewUniqueList(SharemindLibDataStoreManager_INSTALL_DEFINITIONS
-    ${SharemindLibDataStoreManager_DEFINITIONS})
-SharemindUseCMakeFindFiles(COMPONENT "common-dev")
+SharemindCreateCMakeFindFiles(
+    COMPONENT "common-dev"
+    INCLUDE_DIRS
+        "${CMAKE_INSTALL_PREFIX}/include"
+        ${SharemindLibDataStoreManager_INCLUDE_DIRS}
+    DEFINITIONS
+        ${SharemindLibDataStoreManager_DEFINITIONS}
+    LIBRARIES
+        ${SharemindLibDataStoreManager_LINK_LIBRARIES}
+        "-L${CMAKE_INSTALL_PREFIX}/lib"
+        "-lsharemind_datastoremanager"
+)
 
 
 # Packaging:
