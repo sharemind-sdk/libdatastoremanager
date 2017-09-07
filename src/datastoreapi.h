@@ -27,14 +27,6 @@
 extern "C" {
 #endif
 
-#ifndef SHAREMIND_ICONST
-#ifdef SHAREMIND_INTERNAL_
-#define SHAREMIND_ICONST
-#else
-#define SHAREMIND_ICONST const
-#endif
-#endif /* SHAREMIND_ICONST */
-
 // TODO documentation
 
 /** Forward declarations: */
@@ -52,8 +44,6 @@ typedef SharemindDataStore_ SharemindDataStore;
 
 /** Wrapper object */
 struct SharemindDataStoreFactory_ {
-    SHAREMIND_ICONST void * SHAREMIND_ICONST internal;
-
     SharemindDataStore * (* get_datastore)(SharemindDataStoreFactory * factory, const char * name);
 };
 
@@ -64,10 +54,6 @@ struct SharemindDataStoreFactory_ {
 
 /** Wrapper object */
 struct SharemindDataStore_ {
-    SHAREMIND_ICONST void * SHAREMIND_ICONST internal;
-
-    SHAREMIND_ICONST SharemindDataStoreFactory * SHAREMIND_ICONST factoryHandle;
-
     void (* clear)(SharemindDataStore * datastore);
     void * (* get)(SharemindDataStore * datastore, const char * key);
     bool (* remove)(SharemindDataStore * datastore, const char * key);

@@ -26,8 +26,7 @@ extern "C" {
 
 void SharemindDataStore_clear(SharemindDataStore * datastore) {
     assert(datastore);
-    assert(datastore->internal);
-    static_cast<sharemind::DataStore *>(datastore->internal)->clear();
+    sharemind::DataStore::fromWrapper(*datastore).clear();
 }
 
 bool SharemindDataStore_set(SharemindDataStore * datastore,
@@ -36,10 +35,9 @@ bool SharemindDataStore_set(SharemindDataStore * datastore,
                             sharemind_datastore_destroy_fn_ptr destroyFn)
 {
     assert(datastore);
-    assert(datastore->internal);
     assert(key);
     try {
-        return static_cast<sharemind::DataStore *>(datastore->internal)->set(
+        return sharemind::DataStore::fromWrapper(*datastore).set(
                     key,
                     value,
                     destroyFn);
@@ -49,19 +47,16 @@ bool SharemindDataStore_set(SharemindDataStore * datastore,
 void * SharemindDataStore_get(SharemindDataStore * datastore, const char * key)
 {
     assert(datastore);
-    assert(datastore->internal);
     assert(key);
-    return static_cast<sharemind::DataStore *>(datastore->internal)->get(key);
+    return sharemind::DataStore::fromWrapper(*datastore).get(key);
 }
 
 bool SharemindDataStore_remove(SharemindDataStore * datastore, const char * key)
 {
     assert(datastore);
-    assert(datastore->internal);
     assert(key);
     try {
-        return static_cast<sharemind::DataStore *>(datastore->internal)->remove(
-                    key);
+        return sharemind::DataStore::fromWrapper(*datastore).remove(key);
     } catch (...) { return false; }
 }
 
@@ -69,13 +64,12 @@ bool SharemindDataStore_remove(SharemindDataStore * datastore, const char * key)
 
 namespace sharemind {
 
-DataStore::DataStore(DataStoreFactory & factory)
-    : m_wrapper{this,
-                &factory.wrapper(),
-                &SharemindDataStore_clear,
-                &SharemindDataStore_get,
-                &SharemindDataStore_remove,
-                &SharemindDataStore_set}
+DataStore::DataStore()
+    : ::SharemindDataStore{
+            &SharemindDataStore_clear,
+            &SharemindDataStore_get,
+            &SharemindDataStore_remove,
+            &SharemindDataStore_set}
 {}
 
 } // namespace sharemind {

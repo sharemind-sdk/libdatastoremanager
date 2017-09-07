@@ -34,7 +34,7 @@
 
 namespace sharemind {
 
-class DataStoreFactory {
+class DataStoreFactory: private ::SharemindDataStoreFactory {
 
 public: /* Types: */
 
@@ -48,12 +48,13 @@ public: /* Methods: */
 
     DataStore::Wrapper & dataStoreWrapper(const std::string & name);
 
-    inline Wrapper & wrapper() noexcept { return m_wrapper; }
-    inline const Wrapper & wrapper() const noexcept { return m_wrapper; }
+    static DataStoreFactory & fromWrapper(Wrapper & wrapper) noexcept
+    { return static_cast<DataStoreFactory &>(wrapper); }
+
+    inline Wrapper & wrapper() noexcept { return *this; }
+    inline const Wrapper & wrapper() const noexcept { return *this; }
 
 private: /* Fields: */
-
-    Wrapper m_wrapper;
 
     std::map<std::string, std::unique_ptr<DataStore> > m_dataStores;
 

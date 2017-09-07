@@ -36,7 +36,7 @@ namespace sharemind {
 
 class DataStoreFactory;
 
-class DataStore {
+class DataStore: private ::SharemindDataStore {
 
 public: /* Types: */
 
@@ -63,10 +63,9 @@ private: /* Types: */
 
 public: /* Methods: */
 
-    DataStore() = delete;
+    DataStore();
     DataStore(DataStore &&) = delete;
     DataStore & operator=(DataStore &&) = delete;
-    DataStore(DataStoreFactory & factory);
 
     inline void clear() noexcept { m_values.clear(); }
 
@@ -87,12 +86,14 @@ public: /* Methods: */
     inline bool remove(const std::string & key)
     { return m_values.erase(key) != 0u; }
 
-    inline Wrapper & wrapper() noexcept { return m_wrapper; }
-    inline Wrapper const & wrapper() const noexcept { return m_wrapper; }
+    static DataStore & fromWrapper(Wrapper & wrapper ) noexcept
+    { return static_cast<DataStore &>(wrapper); }
+
+    inline Wrapper & wrapper() noexcept { return *this; }
+    inline Wrapper const & wrapper() const noexcept { return *this; }
 
 private: /* Fields: */
 
-    Wrapper m_wrapper;
     std::map<std::string, Value> m_values;
 
 }; /* class DataStore { */

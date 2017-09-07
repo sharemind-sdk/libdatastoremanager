@@ -32,11 +32,10 @@ SharemindDataStore * SharemindDataStoreFactory_get_datastore(
         const char * name)
 {
     assert(factory);
-    assert(factory->internal);
     assert(name);
     try {
-        return &static_cast<sharemind::DataStoreFactory *>(factory->internal)
-                    ->dataStoreWrapper(name);
+        auto & cxxFactory = sharemind::DataStoreFactory::fromWrapper(*factory);
+        return &cxxFactory.dataStoreWrapper(name);
     } catch (...) { return nullptr; }
 }
 
@@ -47,7 +46,7 @@ SharemindDataStore * SharemindDataStoreFactory_get_datastore(
 namespace sharemind {
 
 DataStoreFactory::DataStoreFactory()
-    : m_wrapper{this, &SharemindDataStoreFactory_get_datastore}
+    : ::SharemindDataStoreFactory{&SharemindDataStoreFactory_get_datastore}
 {}
 
 DataStore::Wrapper & DataStoreFactory::dataStoreWrapper(
@@ -59,7 +58,7 @@ DataStore::Wrapper & DataStoreFactory::dataStoreWrapper(
         return it->second->wrapper();
 
     // Create a new data store
-    auto ds(makeUnique<DataStore>(*this));
+    auto ds(makeUnique<DataStore>());
     auto & r(ds->wrapper());
     SHAREMIND_DEBUG_ONLY(auto const rit =)
             m_dataStores.emplace(name, std::move(ds));
