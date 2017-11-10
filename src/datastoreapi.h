@@ -33,9 +33,9 @@ extern "C" {
 typedef void (*sharemind_datastore_destroy_fn_ptr)(void *);
 
 struct SharemindDataStoreFactory_;
-typedef SharemindDataStoreFactory_ SharemindDataStoreFactory;
+typedef struct SharemindDataStoreFactory_ SharemindDataStoreFactory;
 struct SharemindDataStore_;
-typedef SharemindDataStore_ SharemindDataStore;
+typedef struct SharemindDataStore_ SharemindDataStore;
 
 
 /*******************************************************************************
