@@ -74,8 +74,9 @@ public: /* Methods: */
              void * const value,
              sharemind_datastore_destroy_fn_ptr const destroyFn)
     {
+        Value storage(value, Deleter{destroyFn});
         return m_values.emplace(std::forward<K>(key),
-                                Value(value, Deleter{destroyFn})).second;
+                                std::move(storage)).second;
     }
 
     inline void * get(const std::string & key) const noexcept {
