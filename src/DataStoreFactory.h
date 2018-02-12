@@ -26,9 +26,9 @@
 
 #include "datastoreapi.h"
 
-#include <string>
-#include <map>
 #include <memory>
+#include <sharemind/SimpleUnorderedStringMap.h>
+#include <string>
 #include "DataStore.h"
 
 
@@ -56,7 +56,7 @@ public: /* Methods: */
 
 private: /* Fields: */
 
-    std::map<std::string, std::unique_ptr<DataStore> > m_dataStores;
+    SimpleUnorderedStringMap<std::unique_ptr<DataStore> > m_dataStores;
 
 }; /* class DataStoreFactory { */
 } /* namespace sharemind { */
