@@ -25,8 +25,8 @@
 #endif
 
 #include <cassert>
-#include <map>
 #include <memory>
+#include <sharemind/SimpleUnorderedStringMap.h>
 #include <string>
 #include <utility>
 #include "datastoreapi.h"
@@ -95,7 +95,7 @@ public: /* Methods: */
 
 private: /* Fields: */
 
-    std::map<std::string, Value> m_values;
+    SimpleUnorderedStringMap<Value> m_values;
 
 }; /* class DataStore { */
 } /* namespace sharemind { */
