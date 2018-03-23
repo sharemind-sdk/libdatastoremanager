@@ -24,11 +24,16 @@
 
 extern "C" {
 
+void SharemindDataStore_clear(SharemindDataStore * datastore);
 void SharemindDataStore_clear(SharemindDataStore * datastore) {
     assert(datastore);
     sharemind::DataStore::fromWrapper(*datastore).clear();
 }
 
+bool SharemindDataStore_set(SharemindDataStore * datastore,
+                            const char * key,
+                            void * value,
+                            sharemind_datastore_destroy_fn_ptr destroyFn);
 bool SharemindDataStore_set(SharemindDataStore * datastore,
                             const char * key,
                             void * value,
@@ -44,6 +49,7 @@ bool SharemindDataStore_set(SharemindDataStore * datastore,
     } catch (...) { return false; }
 }
 
+void * SharemindDataStore_get(SharemindDataStore * datastore, const char * key);
 void * SharemindDataStore_get(SharemindDataStore * datastore, const char * key)
 {
     assert(datastore);
@@ -51,6 +57,8 @@ void * SharemindDataStore_get(SharemindDataStore * datastore, const char * key)
     return sharemind::DataStore::fromWrapper(*datastore).get(key);
 }
 
+bool SharemindDataStore_remove(SharemindDataStore * datastore,
+                               const char * key);
 bool SharemindDataStore_remove(SharemindDataStore * datastore, const char * key)
 {
     assert(datastore);
