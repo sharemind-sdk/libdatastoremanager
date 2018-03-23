@@ -29,6 +29,9 @@ extern "C" {
 
 SharemindDataStore * SharemindDataStoreFactory_get_datastore(
         SharemindDataStoreFactory * factory,
+        const char * name);
+SharemindDataStore * SharemindDataStoreFactory_get_datastore(
+        SharemindDataStoreFactory * factory,
         const char * name)
 {
     assert(factory);
