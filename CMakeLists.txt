@@ -108,7 +108,7 @@ SharemindAddComponentPackage("api-dev"
     DESCRIPTION "Sharemind Data Store Manager library API headers"
     DEB_SECTION "libdevel"
     DEB_DEPENDS
-        "libsharemind-datastoremanager-common-dev (>= ${SharemindLibDataStoreManager_VERSION})"
+        "libsharemind-datastoremanager-common-dev (>= ${SharemindLibDataStoreManager_DEB_common-dev_PACKAGE_VERSION})"
         "libgcc-4.8-dev"
         "| libgcc-4.9-dev"
         "| libgcc-5-dev"
@@ -120,9 +120,9 @@ SharemindAddComponentPackage("dev"
     DESCRIPTION "Sharemind Data Store Manager library development headers"
     DEB_SECTION "libdevel"
     DEB_DEPENDS
-        "libsharemind-datastoremanager (>= ${SharemindLibDataStoreManager_VERSION})"
-        "libsharemind-datastoremanager-api-dev (>= ${SharemindLibDataStoreManager_VERSION})"
-        "libsharemind-datastoremanager-common-dev (>= ${SharemindLibDataStoreManager_VERSION})"
+        "libsharemind-datastoremanager (>= ${SharemindLibDataStoreManager_DEB_lib_PACKAGE_VERSION})"
+        "libsharemind-datastoremanager-api-dev (>= ${SharemindLibDataStoreManager_DEB_api-dev_PACKAGE_VERSION})"
+        "libsharemind-datastoremanager-common-dev (>= ${SharemindLibDataStoreManager_DEB_common-dev_PACKAGE_VERSION})"
         "libsharemind-cxxheaders-dev (>= 0.1.0)"
         "libstdc++-dev"
 )
@@ -131,6 +131,6 @@ SharemindAddComponentPackage("debug"
     DESCRIPTION "Sharemind Data Store Manager library debug symbols"
     DEB_SECTION "debug"
     DEB_DEPENDS
-        "libsharemind-datastoremanager (>= ${SharemindLibDataStoreManager_VERSION})"
+        "libsharemind-datastoremanager (>= ${SharemindLibDataStoreManager_DEB_lib_PACKAGE_VERSION})"
 )
 SharemindPackagingFinalize()
