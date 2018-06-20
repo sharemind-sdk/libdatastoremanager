@@ -28,7 +28,7 @@ FIND_PACKAGE(SharemindCMakeHelpers 1.2 REQUIRED)
 SharemindSetProjectVersion()
 
 SET(Boost_USE_STATIC_RUNTIME OFF)
-FIND_PACKAGE(SharemindCxxHeaders REQUIRED)
+FIND_PACKAGE(SharemindCxxHeaders 0.2.0 REQUIRED)
 
 
 # API headers:
@@ -123,7 +123,7 @@ SharemindAddComponentPackage("dev"
         "libsharemind-datastoremanager (>= ${SharemindLibDataStoreManager_DEB_lib_PACKAGE_VERSION})"
         "libsharemind-datastoremanager-api-dev (>= ${SharemindLibDataStoreManager_DEB_api-dev_PACKAGE_VERSION})"
         "libsharemind-datastoremanager-common-dev (>= ${SharemindLibDataStoreManager_DEB_common-dev_PACKAGE_VERSION})"
-        "libsharemind-cxxheaders-dev (>= 0.1.0)"
+        "libsharemind-cxxheaders-dev (>= 0.2.0)"
         "libstdc++-dev"
 )
 SharemindAddComponentPackage("debug"
