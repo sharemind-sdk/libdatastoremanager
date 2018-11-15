@@ -54,7 +54,7 @@ SharemindNewUniqueList(SharemindLibDataStoreManager_INCLUDE_DIRS
 SharemindNewUniqueList(SharemindLibDataStoreManager_DEFINITIONS
     ${SharemindCxxHeaders_DEFINITIONS}
 )
-SharemindSetCxx11CompileOptions()
+SharemindSetCxx14CompileOptions()
 FILE(GLOB_RECURSE SharemindLibDataStoreManager_SOURCES
      "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 SharemindAddSharedLibrary("libdatastoremanager"
