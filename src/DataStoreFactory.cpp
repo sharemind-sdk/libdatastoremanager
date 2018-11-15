@@ -20,7 +20,6 @@
 #include "DataStoreFactory.h"
 
 #include <cassert>
-#include <sharemind/MakeUnique.h>
 #include <sharemind/DebugOnly.h>
 
 
@@ -61,7 +60,7 @@ DataStore::Wrapper & DataStoreFactory::dataStoreWrapper(
         return it->second->wrapper();
 
     // Create a new data store
-    auto ds(makeUnique<DataStore>());
+    auto ds(std::make_unique<DataStore>());
     auto & r(ds->wrapper());
     SHAREMIND_DEBUG_ONLY(auto const rit =)
             m_dataStores.emplace(name, std::move(ds));
