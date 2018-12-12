@@ -23,10 +23,10 @@ PROJECT(SharemindLibDataStoreManager VERSION "0.1.4" LANGUAGES "CXX")
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/config.local" OPTIONAL)
 INCLUDE("${CMAKE_CURRENT_BINARY_DIR}/config.local" OPTIONAL)
 
-FIND_PACKAGE(SharemindCMakeHelpers 1.3 REQUIRED)
+FIND_PACKAGE(SharemindCMakeHelpers 1.4 REQUIRED)
 
 SET(Boost_USE_STATIC_RUNTIME OFF)
-FIND_PACKAGE(SharemindCxxHeaders 0.2.0 REQUIRED)
+FIND_PACKAGE(SharemindCxxHeaders 0.5.0 REQUIRED)
 
 
 # API headers:
@@ -121,7 +121,7 @@ SharemindAddComponentPackage("dev"
         "libsharemind-datastoremanager (>= ${SharemindLibDataStoreManager_DEB_lib_PACKAGE_VERSION})"
         "libsharemind-datastoremanager-api-dev (>= ${SharemindLibDataStoreManager_DEB_api-dev_PACKAGE_VERSION})"
         "libsharemind-datastoremanager-common-dev (>= ${SharemindLibDataStoreManager_DEB_common-dev_PACKAGE_VERSION})"
-        "libsharemind-cxxheaders-dev (>= 0.2.0)"
+        "libsharemind-cxxheaders-dev (>= 0.5.0)"
         "libstdc++-dev"
 )
 SharemindAddComponentPackage("debug"
