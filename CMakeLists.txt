@@ -94,6 +94,7 @@ SharemindAddComponentPackage("dev"
     DEB_DEPENDS
         "libsharemind-datastoremanager (>= ${SharemindLibDataStoreManager_DEB_lib_PACKAGE_VERSION})"
         "libsharemind-cxxheaders-dev (>= 0.5.0)"
+        "libsharemind-data-store-api-dev (>= 0.1.0)"
         "libstdc++-dev"
 )
 SharemindAddComponentPackage("debug"
