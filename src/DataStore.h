@@ -26,10 +26,10 @@
 
 #include <cassert>
 #include <memory>
+#include <sharemind/datastoreapi.h>
 #include <sharemind/SimpleUnorderedStringMap.h>
 #include <string>
 #include <utility>
-#include "datastoreapi.h"
 
 
 namespace sharemind {

@@ -24,7 +24,7 @@
 #error SHAREMIND_INTERNAL_ not defined
 #endif
 
-#include "datastoreapi.h"
+#include <sharemind/datastoreapi.h>
 
 #include <memory>
 #include <sharemind/SimpleUnorderedStringMap.h>

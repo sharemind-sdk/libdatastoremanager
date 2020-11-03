@@ -26,20 +26,13 @@ INCLUDE("${CMAKE_CURRENT_BINARY_DIR}/config.local" OPTIONAL)
 FIND_PACKAGE(SharemindCMakeHelpers 1.4 REQUIRED)
 
 SET(Boost_USE_STATIC_RUNTIME OFF)
-FIND_PACKAGE(SharemindCxxHeaders 0.5.0 REQUIRED)
+FIND_PACKAGE(SharemindCxxHeaders 0.8.0 REQUIRED)
+FIND_PACKAGE(SharemindDataStoreApi 0.1.0 REQUIRED)
 
-
-# API headers:
-SET(SharemindLibDataStoreManager_API_HEADERS
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/datastoreapi.h")
-INSTALL(FILES ${SharemindLibDataStoreManager_API_HEADERS}
-        DESTINATION "include/sharemind"
-        COMPONENT "api-dev")
 
 # Headers:
 FILE(GLOB_RECURSE SharemindLibDataStoreManager_HEADERS
      "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
-LIST(REMOVE_ITEM SharemindLibDataStoreManager_HEADERS ${SharemindLibDataStoreManager_API_HEADERS})
 INSTALL(FILES ${SharemindLibDataStoreManager_HEADERS}
         DESTINATION "include/sharemind"
         COMPONENT "dev")
@@ -57,12 +50,11 @@ SharemindNewUniqueList(SharemindLibDataStoreManager_DEFINITIONS
 SharemindSetCxx14CompileOptions()
 FILE(GLOB_RECURSE SharemindLibDataStoreManager_SOURCES
      "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
-SharemindAddSharedLibrary("libdatastoremanager"
+SharemindAddSharedLibrary(LibDataStoreManager
     OUTPUT_NAME "sharemind_datastoremanager"
     SOURCES
         ${SharemindLibDataStoreManager_SOURCES}
         ${SharemindLibDataStoreManager_HEADERS}
-        ${SharemindLibDataStoreManager_API_HEADERS}
     INCLUDE_DIRECTORIES
         ${SharemindLibDataStoreManager_INCLUDE_DIRS}
     LEGACY_DEFINITIONS
@@ -72,10 +64,10 @@ SharemindAddSharedLibrary("libdatastoremanager"
     LINK_LIBRARIES
         ${SharemindLibDataStoreManager_LINK_LIBRARIES}
 )
+TARGET_LINK_LIBRARIES(LibDataStoreManager PUBLIC Sharemind::DataStoreApi)
 
 # Install CMake files:
 SharemindCreateCMakeFindFiles(
-    COMPONENT "common-dev"
     INCLUDE_DIRS
         "${CMAKE_INSTALL_PREFIX}/include"
         ${SharemindLibDataStoreManager_INCLUDE_DIRS}
@@ -96,31 +88,12 @@ SharemindAddComponentPackage("lib"
     DEB_SECTION "libs"
     DEB_DEPENDS "libstdc++6 (>= 4.8.0)"
 )
-SharemindAddComponentPackage("common-dev"
-    NAME "libsharemind-datastoremanager-common-dev"
-    DESCRIPTION "Sharemind Data Store Manager library common development files"
-    DEB_SECTION "libdevel"
-)
-SharemindAddComponentPackage("api-dev"
-    NAME "libsharemind-datastoremanager-api-dev"
-    DESCRIPTION "Sharemind Data Store Manager library API headers"
-    DEB_SECTION "libdevel"
-    DEB_DEPENDS
-        "libsharemind-datastoremanager-common-dev (>= ${SharemindLibDataStoreManager_DEB_common-dev_PACKAGE_VERSION})"
-        "libgcc-4.8-dev"
-        "| libgcc-4.9-dev"
-        "| libgcc-5-dev"
-        "| libgcc-6-dev"
-        "| libgcc-7-dev"
-)
 SharemindAddComponentPackage("dev"
     NAME "libsharemind-datastoremanager-dev"
     DESCRIPTION "Sharemind Data Store Manager library development headers"
     DEB_SECTION "libdevel"
     DEB_DEPENDS
         "libsharemind-datastoremanager (>= ${SharemindLibDataStoreManager_DEB_lib_PACKAGE_VERSION})"
-        "libsharemind-datastoremanager-api-dev (>= ${SharemindLibDataStoreManager_DEB_api-dev_PACKAGE_VERSION})"
-        "libsharemind-datastoremanager-common-dev (>= ${SharemindLibDataStoreManager_DEB_common-dev_PACKAGE_VERSION})"
         "libsharemind-cxxheaders-dev (>= 0.5.0)"
         "libstdc++-dev"
 )
