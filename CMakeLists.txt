@@ -35,7 +35,6 @@ FILE(GLOB_RECURSE SharemindLibDataStoreManager_HEADERS
 INSTALL(FILES ${SharemindLibDataStoreManager_HEADERS}
         DESTINATION "include/sharemind"
         COMPONENT "dev")
-SharemindSetCxx14CompileOptions()
 FILE(GLOB_RECURSE SharemindLibDataStoreManager_SOURCES
      "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 SharemindAddSharedLibrary(LibDataStoreManager
