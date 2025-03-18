@@ -25,7 +25,7 @@ INCLUDE("${CMAKE_CURRENT_BINARY_DIR}/config.local" OPTIONAL)
 
 FIND_PACKAGE(SharemindCMakeHelpers 1.6 REQUIRED)
 
-FIND_PACKAGE(SharemindCxxHeaders 0.9.0 REQUIRED)
+FIND_PACKAGE(SharemindCxxHeaders 0.10.1 REQUIRED)
 FIND_PACKAGE(SharemindDataStoreApi 0.1.0 REQUIRED)
 
 
@@ -51,7 +51,7 @@ TARGET_LINK_LIBRARIES(LibDataStoreManager
     )
 SharemindCreateCMakeFindFilesForTarget(LibDataStoreManager
     DEPENDENCIES
-        "SharemindCxxHeaders 0.9.0"
+        "SharemindCxxHeaders 0.10.1"
         "SharemindDataStoreApi 0.1.0"
     )
 
@@ -70,7 +70,7 @@ SharemindAddComponentPackage("dev"
     DEB_SECTION "libdevel"
     DEB_DEPENDS
         "libsharemind-datastoremanager (>= ${SharemindLibDataStoreManager_DEB_lib_PACKAGE_VERSION})"
-        "libsharemind-cxxheaders-dev (>= 0.9.0)"
+        "libsharemind-cxxheaders-dev (>= 0.10.1)"
         "libsharemind-data-store-api-dev (>= 0.1.0)"
         "libstdc++-dev"
 )
